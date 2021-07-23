@@ -79,67 +79,53 @@ function postexercise(req, res) {
 }
 
 function logs(req, res) {
+    const {
+        from,
+        to,
+        limit
+    } = req.query;
+    const fromDate = (moment(new Date(from), 'YYYY-MM-DD', true).isValid()) ? moment(new Date(from), 'YYYY-MM-DD') : 0;
+    const toDate = (moment(new Date(to), 'YYYY-MM-DD', true).isValid()) ? moment(new Date(to), 'YYYY-MM-DD') : moment().add(1000000000000);
 
     exercisemodel
         .find({
             user_id: req.params._id,
-        }).exec(function (err, user) {
+            date: {
+                $gte: fromDate,
+                $lte: toDate
+            }
+        }).limit(+limit).exec(function (err, user) {
             if (err) {
                 return res.status(500).json({
                     msg: err.message
                 })
             }
-            if (user) {
-                // res.json(user.map(function(item) {
-                //     return({
-                //         _id: user[0].user_id,
-                //         username: user[0].username,
-                //     count: item.length,
-                //     log: [{
-                //         date: item.date,
-                //         duration: item.duration
-                //     },
+            if (!user) return res.json('Unknown user with _id');
 
 
-                // ]
-                //     });
-                // }));
-                res.json({
-                    _id: user[0].user_id,
-                    username: user[0].username,
-                    count: user.length,
-                    log: (user.map(function (item) {
-                        return ({
-                            description: item.description,
-                            duration: item.duration,
-                            date: moment(new Date(item.date)).format('ddd MMMM D YYYY'),
+            console.log(user)
+            res.json({
+                _id: req.params._id,
+                username: user[0].username,
+                count: user.length,
+                log: (user.map(function (item) {
+                    return ({
+                        description: item.description,
+                        duration: parseInt(item.duration),
+                        date: moment(new Date(item.date)).format('ddd MMMM D YYYY'),
+                    })
+                }))
 
+            });
 
-                        })
-                    }))
-                    // {
-                    //                         date:  user[0].date,
-                    //                         duration: user[0].duration
-                    //                     },
-                    //                     {
-                    //                         date:  user[1].date,
-                    //                         duration: user[1].duration
-                    //                     }
-
-
-                });
-            } else {
-                return res.status(500).json({
-                    msg: err.message
-                })
-            }
         });
 }
-// _id:user.user_id,
-// username:user.username
+
+
+
 module.exports = {
     postuser,
     getusers,
     postexercise,
-    logs
+    logs,
 };
