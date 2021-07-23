@@ -1,6 +1,6 @@
 const usermodel = require("./usermodel")
 const exercisemodel = require("./exercisemodel")
-
+const moment=require("moment")
 
 function postuser(req, res) {
     const newUser = new usermodel({
@@ -41,7 +41,7 @@ function postexercise(req, res) {
             duration,
             description
         } = req.body
-        var date = req.body.date || new Date().toUTCString();
+        var date = req.body.date || moment( new Date()).format('ddd MMMM D YYYY');
         usermodel.findById(req.body._id).exec(function (err, user) {
             if (err) {
                 return res.status(500).json({
@@ -60,7 +60,7 @@ function postexercise(req, res) {
                 res.json({
                     _id: req.body._id,
                     username: user.username,
-                    date: new Date(date).toUTCString(),
+                    date:moment( new Date(date)).format('ddd MMMM D YYYY'),
                     duration: duration,
                     description: description
                 })
