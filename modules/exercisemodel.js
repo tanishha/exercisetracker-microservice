@@ -6,18 +6,15 @@ const ExerciseSchema = new Mongoose.Schema({
         type: String
     },
     description: {
-        type: Array,
+        type: String,
         required: true,
-        default: []
     },
     duration: {
-        type: Array,
+        type: String,
         required: true,
-        default: []
     },
     date: {
-        type: Array,
-        default: new Date().toUTCString()
+        type: Date,
     },
     username:{
         type:String
