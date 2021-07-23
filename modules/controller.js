@@ -101,9 +101,6 @@ function logs(req, res) {
                 })
             }
             if (!user) return res.json('Unknown user with _id');
-
-
-            console.log(user)
             res.json({
                 _id: req.params._id,
                 username: user[0].username,

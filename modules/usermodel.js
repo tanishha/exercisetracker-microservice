@@ -5,7 +5,8 @@ const formatYmd = today => today.toISOString().slice(0, 10);
 const UserSchema = new Mongoose.Schema({
     username: {
         type: String,
-        required:true
+        required:true,
+        unique:true
     },
     count:{
         type:Number,
