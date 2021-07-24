@@ -1,8 +1,12 @@
 //schema definition
 var Mongoose = require('mongoose');
-let today = new Date()
-const formatYmd = today => today.toISOString().slice(0, 10);
+const shortid = require('shortid');
+
 const UserSchema = new Mongoose.Schema({
+    _id: {
+        type: String,
+        default: shortid.generate
+    },
     username: {
         type: String,
         required:true,

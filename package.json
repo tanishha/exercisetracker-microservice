@@ -14,9 +14,10 @@
     "express": "^4.16.4",
     "moment": "^2.29.1",
     "mongoose": "^5.13.3",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "short-id": "0.1.0-1"
   },
-   "license": "MIT",
+  "license": "MIT",
   "devDependencies": {
     "nodemon": "^2.0.4"
   }

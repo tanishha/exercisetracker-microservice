@@ -100,9 +100,9 @@ function logs(req, res) {
     let { userId, from, to, limit } = req.query;
     from = moment(from, 'YYYY-MM-DD').isValid() ? moment(from, 'YYYY-MM-DD') : 0;
     to = moment(to, 'YYYY-MM-DD').isValid() ? moment(to, 'YYYY-MM-DD') : moment().add(1000000000000);
-    User.findById(userId).then(user => {
+    usermodel.findById(userId).then(user => {
         if (!user) throw new Error('Unknown user with _id');
-        Exercise.find({ userId })
+        exercisemodel.find({ userId })
             .where('date').gte(from).lte(to)
             .limit(+limit).exec()
             .then(log => res.status(200).send({
