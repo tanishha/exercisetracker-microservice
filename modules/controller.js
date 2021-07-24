@@ -3,20 +3,33 @@ const exercisemodel = require("./exercisemodel")
 const moment = require("moment")
 
 function postuser(req, res) {
-    const newUser = new usermodel({
-        username: req.body.username,
-    });
-    newUser.save()
-        .then(function (data) {
-            res.json({
-                _id: data.id,
-                username: data.username
-            })
-        })
-        .catch(function (err) {
-            return res.status(500).json({
-                msg: err.message
-            })
+    // const newUser = new usermodel({
+    //     username: req.body.username,
+    // });
+    // newUser.save()
+    //     .then(function (data) {
+    //         res.json({
+    //             _id: data.id,
+    //             username: data.username
+    //         })
+    //     })
+    //     .catch(function (err) {
+    //         return res.status(500).json({
+    //             msg: err.message
+    //         })
+    //     })
+    const { username } = req.body;
+    usermodel.findOne({ username }).then(user => {
+        if (user) throw new Error('username already taken');
+        return usermodel.create({ username })
+    })
+        .then(user => res.status(200).send({
+            username: user.username,
+            _id: user._id
+        }))
+        .catch(err => {
+            console.log(err);
+            res.status(500).send(err.message);
         })
 }
 
