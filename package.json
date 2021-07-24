@@ -15,7 +15,7 @@
     "moment": "^2.29.1",
     "mongoose": "^5.13.3",
     "morgan": "^1.10.0",
-    "short-id": "0.1.0-1"
+    "shortid": "^2.2.16"
   },
   "license": "MIT",
   "devDependencies": {
