@@ -36,45 +36,49 @@ function getusers(req, res) {
 }
 
 function postexercise(req, res) {
-    try {
-        const {
-            duration,
-            description
-        } = req.body
-        var date = req.body.date || moment(new Date()).format('ddd MMMM D YYYY');
-        usermodel.findById(req.body._id).exec(function (err, user) {
-            if (err) {
-                return res.status(500).json({
-                    msg: err.message
-                })
-            }
-            if (user) {
-                const newexercise = new exercisemodel({
-                    date,
-                    duration,
-                    description,
-                    user_id: req.body._id,
-                    username: user.username,
-                });
-                newexercise.save()
-                res.json({
-                    _id: req.body._id,
-                    username: user.username,
-                    date: moment(new Date(date)).format('ddd MMMM D YYYY'),
-                    duration: duration,
-                    description: description
-                })
+    const user_id = req.params._id;
+    const {
+        duration,
+        description
+    } = req.body;
+    let date = req.body.date ? new Date(req.body.date) : new Date();
 
+    if (user_id && duration && description) {
+        usermodel.findById(user_id, (err, data) => {
+            if (!data) {
+                res.send("Unknown userId");
+                console.log("UNKNOWN USERID TRIGGERED");
             } else {
-                res.json(
-                    "not found",
-                );
+                const username = data.username;
+                const newExercise = new exercisemodel({
+                    user_id,
+                    username,
+                    "date": date.toDateString(),
+                    duration,
+                    description
+                });
+
+                newExercise.save((err, data) => {
+                    if (err) console.error(err);
+                    console.log("EXERCISE ADDED: ", {
+                        "_id": user_id,
+                        username,
+                        "date": date.toDateString(),
+                        duration,
+                        description
+                    });
+                    res.json({
+                        "_id": user_id,
+                        username,
+                        "date": date.toDateString(),
+                        "duration": parseInt(duration),
+                        description
+                    });
+                });
             }
-        })
-    } catch (err) {
-        return res.status(500).json({
-            msg: err.message
-        })
+        });
+    } else {
+        res.send("Please fill in all required fields.");
     }
 }
 
