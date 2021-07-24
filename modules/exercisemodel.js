@@ -2,7 +2,7 @@
 var Mongoose = require('mongoose');
 
 const ExerciseSchema = new Mongoose.Schema({
-    userId: {
+    user_id: {
         type: String
     },
     description: {
@@ -16,5 +16,8 @@ const ExerciseSchema = new Mongoose.Schema({
     date: {
         type: Date,
     },
-   });
+    username:{
+        type:String
+    }
+});
 module.exports = Mongoose.model("ExerciseModel", ExerciseSchema);
